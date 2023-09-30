@@ -1,8 +1,8 @@
 FROM arm64v8/alpine:3.18
 
 # obtain at: http://d.defold.com/stable/info.json
-ENV DEFOLD_VERSION 1.5.0
-ENV DEFOLD_VERSION_SHA1 57b34efdf44a922acc6f21d285b207029b53927d
+ENV DEFOLD_VERSION 1.6.0
+ENV DEFOLD_VERSION_SHA1 d9e9c49ab946c058f29a8b688c862d70f30e9c43
 
 # copy shortcut scripts
 COPY ./scripts/ /usr/local/bin/
