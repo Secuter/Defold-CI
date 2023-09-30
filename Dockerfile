@@ -8,6 +8,9 @@ ENV DEFOLD_VERSION_SHA1 d9e9c49ab946c058f29a8b688c862d70f30e9c43
 COPY ./scripts/ /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
 
+# install curl
+RUN apk update && apk add --no-cache curl
+
 # download bob.jar
 RUN curl -L -o /usr/local/bin/bob.jar http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar
 
@@ -18,7 +21,7 @@ RUN curl -L -o /usr/local/bin/dmengine_headless http://d.defold.com/archive/${DE
 # update file permissions
 RUN chown root:root /usr/local/bin/*
 
-# install some dependencies
+# install dependencies
 # according to: https://forum.defold.com/t/spine-4-1/72923/2
 RUN apk update \
  && apk add --no-cache openjdk17 openal-soft-dev mesa-dev mesa-gl freeglut-dev \
