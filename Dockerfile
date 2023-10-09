@@ -26,7 +26,7 @@ RUN chown root:root /usr/local/bin/*
 # install dependencies
 # according to https://forum.defold.com/t/spine-4-1/72923/2
 RUN apt-get update \
- && apt-get install -y --no-install-recommends libopenal-dev libgl1-mesa-dev libglw1-mesa-dev freeglut3-dev \
+ && apt-get install -y --no-install-recommends libopenal-dev libgl1-mesa-dev libglw1-mesa-dev freeglut3-dev zip \
  && apt-get autoremove -y \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
