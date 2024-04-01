@@ -44,3 +44,4 @@ jobs:
 
       - name: Build container image
         uses: ./.github/workflows/docker-publish.yml
+        if: ${{ needs.vars.outputs.version_changed == 'true' }}
