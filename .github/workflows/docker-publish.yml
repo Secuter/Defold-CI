@@ -7,7 +7,7 @@ on:
 env:
   REGISTRY: docker.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]'
+  IMAGE_NAME: $(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
 
 jobs:
   build:
