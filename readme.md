@@ -1,6 +1,6 @@
 ## Docker image for CI build of a Defold project and deploy on Itch.io using butler.
 
-Docker image on docker hub
+Docker image at docker hub
 https://hub.docker.com/r/secuter/defold-ci
 
 Built on top of openjdk:17-jdk-bullseye, it includes intalled in path:
