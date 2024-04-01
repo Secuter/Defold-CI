@@ -25,10 +25,10 @@ jobs:
           echo "Latest version: $latest_version"
           if [ "$current_version" != "$latest_version" ]; then
             echo "Version changed."
-            echo version_changed=true
+            version_changed=true
           else
             echo "Version unchanged."
-            echo version_changed=false
+            version_changed=false
           fi
           
       - name: Commit
