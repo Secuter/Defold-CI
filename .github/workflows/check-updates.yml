@@ -1,0 +1,41 @@
+name: Check Defold updates
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get latest version
+        run: |
+          curl -sSL http://d.defold.com/stable/info.json -o latest_info.json
+          LATEST_VERSION=$(jq -r .version latest_info.json)
+          echo "::set-output name=version::$LATEST_VERSION"
+
+      - name: Compare versions
+        run: |
+          PREVIOUS_VERSION=$(jq -r .version info.json)
+          LATEST_VERSION=${{ steps.get_version.outputs.version }}
+          if [ "$PREVIOUS_VERSION" != "$LATEST_VERSION" ]; then
+            echo "Version changed. Updating repository."
+            echo "::set-output name=version_changed::true"
+          else
+            echo "Version unchanged. No action needed."
+            echo "::set-output name=version_changed::false"
+          fi
+          
+      - name: Commit & Push
+      - uses: EndBug/add-and-commit@v9
+        if: ${{ needs.check-version.outputs.compare_versions == 'true' }}
+        with:
+          message: "Update version to ${{ steps.check-version.outputs.version }}"
+          add: info.json
+          fetch: true
+          push: true
+          tag: 'v${{ steps.check-version.outputs.version }} --force'
+          
