@@ -1,6 +1,7 @@
 name: Docker
 
 on:
+  workflow_dispatch:
   workflow_call:
 
 env:
@@ -15,8 +16,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
+      # This is used to complete the identity challenge with sigstore when running outside of PRs
       id-token: write
 
     steps:
@@ -70,7 +70,7 @@ jobs:
       - name: Sign the published Docker image
         env:
           # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
-          TAGS: ${{ steps.meta.outputs.tags }}
+          TAGS: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:${{ env.VERSION }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         # This step uses the identity token to provision an ephemeral certificate
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
