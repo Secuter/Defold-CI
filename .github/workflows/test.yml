@@ -15,14 +15,12 @@ jobs:
         run: |
           IMAGE_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
-          echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
 
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Build and push Docker image
         env:
-          VERSION: $(jq -r .version info.json)
-          TAGS: ${{ env.IMAGE_NAME }}:latest,v${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          TAGS: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:v${{ $(jq -r .version info.json) }}
         run: |
           echo "TAGS: ${TAGS}"
