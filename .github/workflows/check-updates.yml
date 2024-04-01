@@ -31,8 +31,12 @@ jobs:
             echo "Version unchanged."
             echo "version_changed=false" >> $GITHUB_OUTPUT
           fi
-          echo "Version check: ${{ steps.vars.outputs.latest_version }}"
-          
+
+      - name: Debug
+        run: |
+          echo "Version check: ${{ steps.vars.outputs.version_changed }}"
+          echo "Latest version: ${{ steps.vars.outputs.latest_version }}"
+
       - name: Commit
         uses: EndBug/add-and-commit@v9
         if: ${{ steps.vars.outputs.version_changed == 'true' }}
