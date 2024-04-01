@@ -12,29 +12,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get latest version
+      - name: Check version
         run: |
           curl -sSL http://d.defold.com/stable/info.json -o latest_info.json
           latest_version=$(jq -r .version latest_info.json)
-
-      - name: Compare versions
-        run: |
           if [ -f "info.json" ]; then
-            previous_version=$(jq -r .version info.json)
+            current_version=$(jq -r .version info.json)
           else
-            previous_version=""
+            current_version=""
           fi
-          if [ "$previous_version" != "${{ steps.vars.outputs.latest_version }}" ]; then
-            echo "Version changed. Updating repository."
+          echo "Current version: $current_version"
+          echo "latest version: $latest_version"
+          if [ "$current_version" != "$latest_version" ]; then
+            echo "Version changed."
             echo "version_changed=true"
           else
-            echo "Version unchanged. No action needed."
+            echo "Version unchanged."
             echo "version_changed=false"
           fi
           
       - name: Commit
         uses: EndBug/add-and-commit@v9
-        if: ${{ needs.vars.outputs.version_changed == 'true' }}
+        if: ${{ steps.vars.outputs.version_changed == 'true' }}
         with:
           message: "Update version to ${{ steps.vars.outputs.latest_version }}"
           add: info.json
@@ -44,4 +43,4 @@ jobs:
 
       - name: Build container image
         uses: ./.github/workflows/docker-publish.yml
-        if: ${{ needs.vars.outputs.version_changed == 'true' }}
+        if: ${{ steps.vars.outputs.version_changed == 'true' }}
