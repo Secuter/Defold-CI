@@ -22,7 +22,7 @@ jobs:
             current_version=""
           fi
           echo "Current version: $current_version"
-          echo "latest version: $latest_version"
+          echo "Latest version: $latest_version"
           if [ "$current_version" != "$latest_version" ]; then
             echo "Version changed."
             echo "version_changed=true"
