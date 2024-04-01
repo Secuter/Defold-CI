@@ -19,8 +19,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build and push Docker image
+      - name: Get version
+        run: |
+          VERSION=$(jq -r .version info.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Get Docker tags
         env:
-          TAGS: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:v${{ $(jq -r .version info.json) }}
+          TAGS: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:v${{ env.VERSION }}
         run: |
           echo "TAGS: ${TAGS}"
