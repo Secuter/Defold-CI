@@ -14,28 +14,27 @@ jobs:
       - name: Get latest version
         run: |
           curl -sSL http://d.defold.com/stable/info.json -o latest_info.json
-          LATEST_VERSION=$(jq -r .version latest_info.json)
-          echo "::set-output name=version::$LATEST_VERSION"
+          latest_version=$(jq -r .version latest_info.json)
 
       - name: Compare versions
         run: |
           PREVIOUS_VERSION=$(jq -r .version info.json)
-          LATEST_VERSION=${{ steps.get_version.outputs.version }}
+          LATEST_VERSION=${{ steps.vars.outputs.latest_version }}
           if [ "$PREVIOUS_VERSION" != "$LATEST_VERSION" ]; then
             echo "Version changed. Updating repository."
-            echo "::set-output name=version_changed::true"
+            echo "version_changed::true"
           else
             echo "Version unchanged. No action needed."
-            echo "::set-output name=version_changed::false"
+            echo "version_changed::false"
           fi
           
       - name: Commit & Push
-      - uses: EndBug/add-and-commit@v9
-        if: ${{ needs.check-version.outputs.compare_versions == 'true' }}
+        uses: EndBug/add-and-commit@v9
+        if: ${{ needs.vars.outputs.version_changed == 'true' }}
         with:
-          message: "Update version to ${{ steps.check-version.outputs.version }}"
+          message: "Update version to ${{ steps.vars.outputs.latest_version }}"
           add: info.json
           fetch: true
           push: true
-          tag: 'v${{ steps.check-version.outputs.version }} --force'
+          tag: 'v${{ steps.check-version.outputs.latest_version }} --force'
           
