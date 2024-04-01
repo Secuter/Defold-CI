@@ -6,8 +6,6 @@ on:
 
 env:
   REGISTRY: docker.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: $(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
 
 jobs:
   build:
@@ -20,6 +18,11 @@ jobs:
       id-token: write
 
     steps:
+      - name: Get repository name lowercase
+        run: |
+          IMAGE_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
