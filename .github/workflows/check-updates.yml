@@ -1,4 +1,4 @@
-name: Check Defold updates
+name: Check Defold Updates
 
 on:
   workflow_dispatch:
