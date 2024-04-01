@@ -7,7 +7,7 @@ on:
 env:
   REGISTRY: docker.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]'
 
 jobs:
   build:
@@ -56,11 +56,12 @@ jobs:
         id: build-and-push
         env:
           VERSION: $(jq -r .version info.json)
+          TAGS: ${{ env.IMAGE_NAME }}:latest,v${{ env.IMAGE_NAME }}:${{ env.VERSION }}
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE_NAME }}:latest,v${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          tags: ${{ env.TAGS }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -69,8 +70,7 @@ jobs:
       # https://github.com/sigstore/cosign
       - name: Sign the published Docker image
         env:
-          # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
-          TAGS: ${{ env.IMAGE_NAME }}:latest,v${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          #TAGS: ${{ env.IMAGE_NAME }}:latest,v${{ env.IMAGE_NAME }}:${{ env.VERSION }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         # This step uses the identity token to provision an ephemeral certificate
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
