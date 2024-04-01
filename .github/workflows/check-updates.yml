@@ -1,6 +1,7 @@
 name: Check Defold Updates
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 */1 * * *"
 
@@ -24,10 +25,10 @@ jobs:
           echo "Latest version: $latest_version"
           if [ "$current_version" != "$latest_version" ]; then
             echo "Version changed."
-            echo "version_changed=true"
+            echo version_changed=true
           else
             echo "Version unchanged."
-            echo "version_changed=false"
+            echo version_changed=false
           fi
           
       - name: Commit
