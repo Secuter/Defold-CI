@@ -1,4 +1,4 @@
-## Docker image for CI build of a Defold project and deploy on Itch.io using butler.
+## Docker image to build a Defold project and deploy on Itch.io using butler
 
 Docker image at docker hub
 https://hub.docker.com/r/secuter/defold-ci
