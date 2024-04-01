@@ -16,7 +16,7 @@ jobs:
         run: |
           curl -sSL http://d.defold.com/stable/info.json -o latest_info.json
           latest_version=$(jq -r .version latest_info.json)
-          echo "::set-output name=latest_version::$latest_version"
+          echo "latest_version=$latest_version" >> $GITHUB_OUTPUT
           if [ -f "info.json" ]; then
             current_version=$(jq -r .version info.json)
           else
@@ -26,18 +26,16 @@ jobs:
           echo "Latest version: $latest_version"
           if [ "$current_version" != "$latest_version" ]; then
             echo "Version changed."
-            version_changed=true
-            echo "::set-output name=version_changed::false"
+            echo "version_changed=true" >> $GITHUB_OUTPUT
           else
             echo "Version unchanged."
-            version_changed=false
-            echo "::set-output name=version_changed::false"
+            echo "version_changed=false" >> $GITHUB_OUTPUT
           fi
           echo "Version check: ${{ steps.vars.outputs.latest_version }}"
           
       - name: Commit
         uses: EndBug/add-and-commit@v9
-        if: ${{ steps.vars.outputs.version_changed == true }}
+        if: ${{ steps.vars.outputs.version_changed == 'true' }}
         with:
           message: "Update version to ${{ steps.vars.outputs.latest_version }}"
           add: info.json
@@ -47,4 +45,4 @@ jobs:
 
       - name: Build container image
         uses: ./.github/workflows/docker-publish.yml
-        if: ${{ steps.vars.outputs.version_changed == true }}
+        if: ${{ steps.vars.outputs.version_changed == 'true' }}
