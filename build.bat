@@ -1,0 +1,1 @@
+docker build -t secuter/defold-ci:latest .
