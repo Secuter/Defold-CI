@@ -1,12 +1,10 @@
 name: Docker
 
 on:
-  schedule:
-    - cron: '0 */6 * * *'
-  push:
-    branches: [ "main" ]
+  #push:
+    #branches: [ "main" ]
     # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
+    #tags: [ 'v*.*.*' ]
 
 env:
   REGISTRY: docker.io
