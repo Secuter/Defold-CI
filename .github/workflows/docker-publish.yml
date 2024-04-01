@@ -1,4 +1,4 @@
-name: Docker
+name: Docker Build
 
 on:
   workflow_dispatch:
@@ -18,13 +18,15 @@ jobs:
       id-token: write
 
     steps:
-      - name: Get repository name lowercase
-        run: |
-          IMAGE_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
-
       - name: Checkout repository
         uses: actions/checkout@v4
+        
+      - name: Get repository name and version
+        run: |
+          IMAGE_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV          
+          VERSION=$(jq -r .version info.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       # Install the cosign tool to sign and verify container images
       # https://github.com/sigstore/cosign-installer
@@ -58,8 +60,7 @@ jobs:
       - name: Build and push Docker image
         id: build-and-push
         env:
-          VERSION: $(jq -r .version info.json)
-          TAGS: ${{ env.IMAGE_NAME }}:latest,v${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          TAGS: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:v${{ env.VERSION }}
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -73,7 +74,6 @@ jobs:
       # https://github.com/sigstore/cosign
       - name: Sign the published Docker image
         env:
-          #TAGS: ${{ env.IMAGE_NAME }}:latest,v${{ env.IMAGE_NAME }}:${{ env.VERSION }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         # This step uses the identity token to provision an ephemeral certificate
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
