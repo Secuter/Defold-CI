@@ -4,6 +4,10 @@ on:
   workflow_dispatch:
   workflow_call:
 
+concurrency:
+  group: "defold-ci-docker-build"
+  cancel-in-progress: true
+
 env:
   REGISTRY: docker.io
 
