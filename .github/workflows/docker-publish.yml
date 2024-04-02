@@ -53,7 +53,6 @@ jobs:
         with:
           default_author: github_actions
           message: "Update version to ${{ steps.defold-version.outputs.latest_version }}"
-          tag: 'v${{ steps.defold-version.outputs.latest_version }} --force'
 
   debug:
     runs-on: ubuntu-latest
