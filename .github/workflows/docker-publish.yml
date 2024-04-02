@@ -9,10 +9,14 @@ env:
   REGISTRY: docker.io
 
 jobs:
-  defold-version:
+  check-version:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      version_changed: ${{ steps.defold-version.outputs.version_changed }}
+      latest_version: ${{ steps.defold-version.outputs.latest_version }}
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -52,18 +56,18 @@ jobs:
 
   debug:
     runs-on: ubuntu-latest
-    needs: defold-version
+    needs: check-version
     steps:
     - name: Debug output
       shell: bash
       run: |
-        echo "Version changed: ${{ needs.defold-version.outputs.version_changed }}"
-        echo "Latest version: ${{ needs.defold-version.outputs.latest_version }}"
+        echo "Version changed: ${{ needs.check-version.outputs.version_changed }}"
+        echo "Latest version: ${{ needs.check-version.outputs.latest_version }}"
 
   build:
     runs-on: ubuntu-latest
-    needs: defold-version
-    if: ${{ needs.defold-version.outputs.version_changed == 'true' }}
+    needs: check-version
+    if: ${{ needs.check-version.outputs.version_changed == 'true' }}
     permissions:
       contents: read
       packages: write
