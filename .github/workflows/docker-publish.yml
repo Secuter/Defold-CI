@@ -73,6 +73,8 @@ jobs:
       packages: write
       # This is used to complete the identity challenge with sigstore
       id-token: write
+    env:
+      VERSION: ${{ needs.check-version.outputs.latest_version }}
 
     steps:
       - name: Checkout repository
@@ -82,9 +84,7 @@ jobs:
         shell: bash
         run: |
           IMAGE_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV          
-          VERSION=$(jq -r .version info.json)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
 
       # Install the cosign tool to sign and verify container images
       # https://github.com/sigstore/cosign-installer
