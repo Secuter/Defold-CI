@@ -48,7 +48,6 @@ jobs:
         with:
           default_author: github_actions
           message: "Update version to ${{ steps.defold-version.outputs.latest_version }}"
-          add: info.json
           tag: 'v${{ steps.defold-version.outputs.latest_version }} --force'
 
   debug:
