@@ -51,6 +51,14 @@ jobs:
           push: true
           tag: 'v${{ steps.defold-version.outputs.latest_version }} --force'
 
+  debug:
+    runs-on: ubuntu-latest
+    needs: defold-version
+    steps:
+    - name: Debug output
+      run: |
+        echo "Version changed: ${{ needs.defold-version.outputs.version_changed }}"
+
   build:
     runs-on: ubuntu-latest
     needs: defold-version
