@@ -46,10 +46,9 @@ jobs:
         uses: EndBug/add-and-commit@v9
         if: ${{ steps.defold-version.outputs.version_changed == 'true' }}
         with:
+          default_author: github_actions
           message: "Update version to ${{ steps.defold-version.outputs.latest_version }}"
           add: info.json
-          fetch: true
-          push: true
           tag: 'v${{ steps.defold-version.outputs.latest_version }} --force'
 
   debug:
