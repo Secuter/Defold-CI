@@ -38,11 +38,6 @@ jobs:
             echo "version_changed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Debug
-        run: |
-          echo "Version check: ${{ steps.defold-version.outputs.version_changed }}"
-          echo "Latest version: ${{ steps.defold-version.outputs.latest_version }}"
-
       - name: Commit
         uses: EndBug/add-and-commit@v9
         if: ${{ steps.defold-version.outputs.version_changed == 'true' }}
@@ -52,10 +47,6 @@ jobs:
           fetch: true
           push: true
           tag: 'v${{ steps.defold-version.outputs.latest_version }} --force'
-
-      - name: Build container image
-        uses: ./.github/workflows/docker-publish.yml
-        if: ${{ steps.defold-version.outputs.version_changed == 'true' }}
 
   build:
     runs-on: ubuntu-latest
