@@ -22,6 +22,7 @@ jobs:
 
       - name: Check version
         id: defold-version
+        shell: bash
         run: |
           curl -sSL http://d.defold.com/stable/info.json -o latest_info.json
           latest_version=$(jq -r .version latest_info.json)
@@ -56,8 +57,10 @@ jobs:
     needs: defold-version
     steps:
     - name: Debug output
+      shell: bash
       run: |
         echo "Version changed: ${{ needs.defold-version.outputs.version_changed }}"
+        echo "Latest version: ${{ needs.defold-version.outputs.latest_version }}"
 
   build:
     runs-on: ubuntu-latest
@@ -74,6 +77,7 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Get repository name and version
+        shell: bash
         run: |
           IMAGE_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV          
