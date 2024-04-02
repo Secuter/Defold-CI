@@ -41,6 +41,7 @@ jobs:
           if [ "$current_version" != "$latest_version" ]; then
             echo "Version changed."
             echo "version_changed=true" >> $GITHUB_OUTPUT
+            mv latest_info.json info.json
           else
             echo "Version unchanged."
             echo "version_changed=false" >> $GITHUB_OUTPUT
