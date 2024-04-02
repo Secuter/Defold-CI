@@ -33,6 +33,7 @@ jobs:
           latest_version=$(jq -r .version latest_info.json)
           latest_version_sha1=$(jq -r .sha1 latest_info.json)
           echo "latest_version=$latest_version" >> $GITHUB_OUTPUT
+          echo "latest_version_sha1=$latest_version_sha1" >> $GITHUB_OUTPUT
           if [ -f "info.json" ]; then
             current_version=$(jq -r .version info.json)
           else
