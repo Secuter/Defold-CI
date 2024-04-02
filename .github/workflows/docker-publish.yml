@@ -2,19 +2,65 @@ name: Docker Build
 
 on:
   workflow_dispatch:
-  workflow_call:
-
-concurrency:
-  group: "defold-ci-docker-build"
-  cancel-in-progress: true
+  schedule:
+    - cron: "0 */1 * * *"
 
 env:
   REGISTRY: docker.io
 
 jobs:
-  build:
-
+  defold-version:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check version
+        id: defold-version
+        run: |
+          curl -sSL http://d.defold.com/stable/info.json -o latest_info.json
+          latest_version=$(jq -r .version latest_info.json)
+          echo "latest_version=$latest_version" >> $GITHUB_OUTPUT
+          if [ -f "info.json" ]; then
+            current_version=$(jq -r .version info.json)
+          else
+            current_version=""
+          fi
+          echo "Current version: $current_version"
+          echo "Latest version: $latest_version"
+          if [ "$current_version" != "$latest_version" ]; then
+            echo "Version changed."
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version unchanged."
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Debug
+        run: |
+          echo "Version check: ${{ steps.defold-version.outputs.version_changed }}"
+          echo "Latest version: ${{ steps.defold-version.outputs.latest_version }}"
+
+      - name: Commit
+        uses: EndBug/add-and-commit@v9
+        if: ${{ steps.defold-version.outputs.version_changed == 'true' }}
+        with:
+          message: "Update version to ${{ steps.defold-version.outputs.latest_version }}"
+          add: info.json
+          fetch: true
+          push: true
+          tag: 'v${{ steps.defold-version.outputs.latest_version }} --force'
+
+      - name: Build container image
+        uses: ./.github/workflows/docker-publish.yml
+        if: ${{ steps.defold-version.outputs.version_changed == 'true' }}
+
+  build:
+    runs-on: ubuntu-latest
+    needs: defold-version
+    if: ${{ needs.defold-version.outputs.version_changed == 'true' }}
     permissions:
       contents: read
       packages: write
