@@ -4,18 +4,8 @@ FROM openjdk:17-jdk-bullseye
 # ENV DEFOLD_VERSION 1.7.0
 # ENV DEFOLD_VERSION_SHA1 bf4dc66ab5fbbafd4294d32c2797c08b630c0be5
 
-# Install jq
-RUN apt update && \
-    apt install -y jq && \
-    rm -rf /var/lib/apt/lists/*
-
-# Get version and sha1 from defold
-RUN curl -sSL http://d.defold.com/stable/info.json -o /tmp/info.json && \
-    export DEFOLD_VERSION=$(jq -r '.version' /tmp/info.json) && \
-    export DEFOLD_VERSION_SHA1=$(jq -r '.sha1' /tmp/info.json) && \
-    rm -rf /tmp/*
-ENV DEFOLD_VERSION=$DEFOLD_VERSION
-ENV DEFOLD_VERSION_SHA1=$DEFOLD_VERSION_SHA1
+ARG DEFOLD_VERSION
+ARG DEFOLD_VERSION_SHA1
 
 # Copy shortcut scripts
 COPY ./scripts/ /usr/local/bin/

@@ -16,6 +16,7 @@ jobs:
     outputs:
       version_changed: ${{ steps.defold-version.outputs.version_changed }}
       latest_version: ${{ steps.defold-version.outputs.latest_version }}
+      latest_version_sha1: ${{ steps.defold-version.outputs.latest_version_sha1 }}
       
     steps:
       - name: Checkout repository
@@ -30,6 +31,7 @@ jobs:
         run: |
           curl -sSL http://d.defold.com/stable/info.json -o latest_info.json
           latest_version=$(jq -r .version latest_info.json)
+          latest_version_sha1=$(jq -r .sha1 latest_info.json)
           echo "latest_version=$latest_version" >> $GITHUB_OUTPUT
           if [ -f "info.json" ]; then
             current_version=$(jq -r .version info.json)
@@ -75,6 +77,7 @@ jobs:
       id-token: write
     env:
       VERSION: ${{ needs.check-version.outputs.latest_version }}
+      VERSION_SHA1: ${{ needs.check-version.outputs.latest_version_sha1 }}
 
     steps:
       - name: Checkout repository
@@ -127,6 +130,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: DEFOLD_VERSION=${{ env.VERSION }} DEFOLD_VERSION_SHA1=${{ env.VERSION_SHA1 }}
 
       # Sign the resulting Docker image digest
       # https://github.com/sigstore/cosign
