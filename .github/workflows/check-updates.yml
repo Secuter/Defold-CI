@@ -1,4 +1,4 @@
-name: Check Defold Updates
+name: Docker Build
 
 on:
   workflow_dispatch:
@@ -9,8 +9,10 @@ env:
   REGISTRY: docker.io
 
 jobs:
-  check-version:
+  defold-version:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -57,11 +59,12 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    needs: defold-version
     if: ${{ needs.defold-version.outputs.version_changed == 'true' }}
     permissions:
       contents: read
       packages: write
-      # This is used to complete the identity challenge with sigstore when running outside of PRs
+      # This is used to complete the identity challenge with sigstore
       id-token: write
 
     steps:
