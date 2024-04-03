@@ -12,11 +12,13 @@ COPY ./scripts/ /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
 
 # Download bob.jar
-RUN curl -L -o /usr/local/bin/bob.jar http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar
+RUN curl -L -o /usr/local/bin/bob.jar http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar && \
+    echo "http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar"
 
 # Download dmengine_headless
 RUN curl -L -o /usr/local/bin/dmengine_headless http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/engine/x86_64-linux/dmengine_headless && \
-    chmod +x /usr/local/bin/dmengine_headless
+    chmod +x /usr/local/bin/dmengine_headless && \
+    echo "http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/engine/x86_64-linux/dmengine_headless"
 
 # Install butler
 RUN curl -L -o /tmp/butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default && \
