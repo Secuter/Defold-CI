@@ -128,7 +128,7 @@ jobs:
           context: .
           push: true
           tags: ${{ env.TAGS }}
-          labels: ${{ steps.meta.outputs.labels }}
+          # labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: DEFOLD_VERSION=${{ env.VERSION }} DEFOLD_VERSION_SHA1=${{ env.VERSION_SHA1 }}
