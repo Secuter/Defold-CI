@@ -129,11 +129,11 @@ jobs:
           push: true
           tags: ${{ env.TAGS }}
           # labels: ${{ steps.meta.outputs.labels }}
-          no-cache: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: DEFOLD_VERSION=${{ env.VERSION }}
-                      DEFOLD_VERSION_SHA1=${{ env.VERSION_SHA1 }}
+          build-args: |
+            DEFOLD_VERSION=${{ env.VERSION }}
+            DEFOLD_VERSION_SHA1=${{ env.VERSION_SHA1 }}
 
       # Sign the resulting Docker image digest
       # https://github.com/sigstore/cosign
