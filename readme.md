@@ -46,7 +46,7 @@ jobs:
       
     - name: Build Defold
       run: |
-        bob resolve distclean build bundle --archive --platform js-web --bundle-output bundle/js-web --variant=debug
+        bob resolve distclean build bundle --archive --platform js-web --bundle-output bundle/js-web
       
     - name: Deploy to itch.io
       run: |
