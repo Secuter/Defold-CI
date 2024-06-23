@@ -11,7 +11,8 @@ Built on top of openjdk:17-jdk-bullseye, it includes intalled in path:
 To use butler you have to set the env variable BUTLER_API_KEY with your Itch.io api key (for the login).
 It's recommended to save it as a secret.
 
-Example workflow to build and publish an HTML5 game
+Example workflow to build and publish an HTML5 game.
+(For games playable in browser, currently you need to set it manually for the first time on itch.io).
 ```
 name: Build Defold game and push on Itch
 
@@ -34,8 +35,6 @@ jobs:
       BUILD_FOLDER: "bundle/js-web/GAME-NAME"
       ITCH_GAME_URL: "user/GAME-NAME"
       BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-      UPDATE_GAME_USER: ${{ secrets.UPDATE_GAME_USER }}
-      UPDATE_GAME_PASSWORD: ${{ secrets.UPDATE_GAME_PASSWORD }}
 
     container:
       image: secuter/defold-build:latest
