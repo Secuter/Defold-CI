@@ -39,7 +39,7 @@ jobs:
         env:
           FORCE_REBUILD: ${{ github.event.inputs.force_rebuild || 'false' }}
         run: |
-          curl -sSL http://d.defold.com/stable/info.json -o latest_info.json
+          curl -sSL http:s://d.defold.com/stable/info.json -o latest_info.json
           latest_version=$(jq -r .version latest_info.json)
           latest_version_sha1=$(jq -r .sha1 latest_info.json)
           echo "latest_version=$latest_version" >> $GITHUB_OUTPUT
