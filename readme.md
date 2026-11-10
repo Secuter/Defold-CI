@@ -3,7 +3,7 @@
 Docker image at docker hub
 https://hub.docker.com/r/secuter/defold-ci
 
-Built on top of eclipse-temurin:25-jdk-jammy, it includes intalled in path:
+Built on top of eclipse-temurin:21-jdk-jammy, it includes intalled in path:
 - bob
 - butler
 - zip
