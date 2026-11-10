@@ -1,6 +1,6 @@
 FROM eclipse-temurin:25-jdk-jammy
 
-# http:s://d.defold.com/stable/info.json
+# https:://d.defold.com/stable/info.json
 # ENV DEFOLD_VERSION 1.7.0
 # ENV DEFOLD_VERSION_SHA1 bf4dc66ab5fbbafd4294d32c2797c08b630c0be5
 
@@ -12,13 +12,13 @@ COPY ./scripts/ /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
 
 # Download bob.jar
-RUN curl -L -o /usr/local/bin/bob.jar http:s://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar && \
-    echo "http:s://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar"
+RUN curl -L -o /usr/local/bin/bob.jar https:://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar && \
+    echo "https:://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar"
 
 # Download dmengine_headless
-RUN curl -L -o /usr/local/bin/dmengine_headless http:s://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/engine/x86_64-linux/dmengine_headless && \
+RUN curl -L -o /usr/local/bin/dmengine_headless https:://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/engine/x86_64-linux/dmengine_headless && \
     chmod +x /usr/local/bin/dmengine_headless && \
-    echo "http:s://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/engine/x86_64-linux/dmengine_headless"
+    echo "https:://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/engine/x86_64-linux/dmengine_headless"
 
 # Install butler
 RUN curl -fL --retry 2 --retry-delay 1 --retry-all-errors --connect-timeout 20 \
