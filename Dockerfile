@@ -21,8 +21,9 @@ RUN curl -L -o /usr/local/bin/dmengine_headless http://d.defold.com/archive/${DE
     echo "http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/engine/x86_64-linux/dmengine_headless"
 
 # Install butler
-RUN curl -L -o /tmp/butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default && \
-    unzip -q /tmp/butler.zip -d /usr/local/bin/ && \
+RUN curl -fL --retry 2 --retry-delay 1 --retry-all-errors --connect-timeout 20 \
+    -o /tmp/butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default && \
+    cd /usr/local/bin && jar xf /tmp/butler.zip && \
     rm /tmp/butler.zip && \
     chmod +x /usr/local/bin/butler
 
