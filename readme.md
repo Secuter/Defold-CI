@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      BUILD_FOLDER: "bundle/js-web/GAME-NAME"
+      BUILD_FOLDER: "bundle/wasm-web/GAME-NAME"
       ITCH_GAME_URL: "user/GAME-NAME"
       BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
 
@@ -45,7 +45,7 @@ jobs:
       
     - name: Build Defold
       run: |
-        bob resolve distclean build bundle --archive --platform js-web --bundle-output bundle/js-web
+        bob resolve distclean build bundle --archive --platform wasm-web --bundle-output bundle/wasm-web
       
     - name: Deploy to itch.io
       run: |
