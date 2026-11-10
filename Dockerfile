@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk-jammy
+FROM eclipse-temurin:25-jdk-jammy
 
 # http://d.defold.com/stable/info.json
 # ENV DEFOLD_VERSION 1.7.0
