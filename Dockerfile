@@ -12,8 +12,8 @@ COPY ./scripts/ /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
 
 # Download bob.jar
-RUN curl -L -o /usr/local/bin/bob.jar http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar && \
-    echo "http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar"
+RUN echo "http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar" && \
+    curl -L -o /usr/local/bin/bob.jar http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/bob/bob.jar
 
 # Download dmengine_headless
 RUN curl -L -o /usr/local/bin/dmengine_headless http://d.defold.com/archive/${DEFOLD_VERSION_SHA1}/engine/x86_64-linux/dmengine_headless && \
